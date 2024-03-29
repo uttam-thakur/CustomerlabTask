@@ -96,6 +96,20 @@ function App() {
     setShowSelected(!showSelected);
   };
 
+  // Function to delete the selected schema name when click on the --- button
+  const handleDeleteSchema = (key) => {
+    // Filter out the selected schema and update the state
+    const updatedSelectedSchemas = selectedSchemas.filter(
+      (schemaKey) => schemaKey !== key
+    );
+    setSelectedSchemas(updatedSelectedSchemas);
+
+    // Filter out the selected schema name and update the state
+    const updatedSelectedSchemaNames = { ...selectedSchemaNames };
+    delete updatedSelectedSchemaNames[key];
+    setSelectedSchemaNames(updatedSelectedSchemaNames);
+  };
+
   // JSX structure for rendering the component
   return (
     <div className="App">
@@ -148,18 +162,32 @@ function App() {
 
           {/* Dropdowns for selecting schema names */}
           {showSelected && (
-            <div style={{ border: "2px solid blue" }}>
+            <div style={{ border: "2px solid blue", width: "95%" }}>
               {Object.entries(selectedSchemaNames).map(([key, name]) => (
-                <div key={key} style={{ marginBottom: "20px" }}>
+                <div
+                  key={key}
+                  style={{ marginBottom: "20px", padding: "20px" }}
+                >
                   <Select
                     fullWidth
                     variant="outlined"
                     value={name}
+                    style={{ width: "80%", marginTop: "20px" }}
                     onChange={(event) => handleSchemaNameChange(event, key)}
                   >
                     <MenuItem value="">Select</MenuItem>
                     <MenuItem value={name}>{name}</MenuItem>
                   </Select>
+                  <Button
+                    style={{
+                      backgroundColor: "#F2FBF9",
+                      padding: "16px",
+                      marginLeft: "20px",
+                    }}
+                    onClick={() => handleDeleteSchema(key)}
+                  >
+                    ---
+                  </Button>
                 </div>
               ))}
             </div>
@@ -174,6 +202,7 @@ function App() {
               defaultValue=""
               value={selectedSchemas[selectedSchemas.length - 1] || ""}
               onChange={handleSchemaChange}
+              style={{ width: "80%" }}
             >
               <MenuItem value="">Select</MenuItem>
               {Object.entries(schemaLabels).map(([key, label]) => (
@@ -183,7 +212,6 @@ function App() {
               ))}
             </Select>
           </div>
-          {/* Link to add a new schema */}
           <Link
             style={{
               color: "#41B494",
