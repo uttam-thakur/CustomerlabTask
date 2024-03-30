@@ -15,10 +15,10 @@ const schemaLabels = {
 };
 
 function App() {
-  const [popupVisible, setPopupVisible] = useState(false); // For controlling visibility of popup
-  const [selectedSchemas, setSelectedSchemas] = useState([]); // For storing selected schemas
-  const [selectedSchemaNames, setSelectedSchemaNames] = useState({}); // For storing selected schema names
-  const [showSelected, setShowSelected] = useState(false); // For controlling visibility of selected schema names
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [selectedSchemas, setSelectedSchemas] = useState([]);
+  const [selectedSchemaNames, setSelectedSchemaNames] = useState({});
+  const [showSelected, setShowSelected] = useState(false);
 
   // Function to toggle the visibility of the popup
   const togglePopup = () => {
@@ -109,6 +109,7 @@ function App() {
     delete updatedSelectedSchemaNames[key];
     setSelectedSchemaNames(updatedSelectedSchemaNames);
   };
+  const hasData = Object.keys(selectedSchemaNames).length > 0;
 
   // JSX structure for rendering the component
   return (
@@ -116,10 +117,18 @@ function App() {
       <div className="navbar">
         <p className="para">View Audience</p>
       </div>
-      <Button variant="outlined" className="saveButton" onClick={togglePopup}>
+      <Button
+        variant="outlined"
+        className="saveButton"
+        onClick={togglePopup}
+        style={{
+          border: "2px solid red",
+          marginTop: "100px",
+          fontSize: "25px",
+        }}
+      >
         Save segment
       </Button>
-      {/* Popup component */}
       {popupVisible && (
         <div
           className="popup"
@@ -157,11 +166,15 @@ function App() {
             placeholder="Name of the segment"
             variant="outlined"
             fullWidth
-            style={{ marginBottom: "20px" }}
+            style={{ marginBottom: "20px", width: "90%" }}
           />
 
+          <p>
+            To save your segment, you need to add the schemas to build the query{" "}
+          </p>
+
           {/* Dropdowns for selecting schema names */}
-          {showSelected && (
+          {showSelected && hasData && (
             <div style={{ border: "2px solid blue", width: "95%" }}>
               {Object.entries(selectedSchemaNames).map(([key, name]) => (
                 <div
@@ -216,7 +229,7 @@ function App() {
             style={{
               color: "#41B494",
               display: "flex",
-              marginLeft: "50px",
+              marginLeft: "65px",
               cursor: "pointer",
             }}
             onClick={handleLinkClick}
